@@ -1,33 +1,21 @@
 import { openDB } from 'idb';
 
-const initDB = async () => {
-  // Open a database
-  const db = await openDB('textEditorDB', 1, {
+const initdb = async () =>
+  openDB('jate', 1, {
     upgrade(db) {
-      // Create a store for storing content if it doesn't already exist
-      if (!db.objectStoreNames.contains('content')) {
-        db.createObjectStore('content', { keyPath: 'id', autoIncrement: true });
+      if (db.objectStoreNames.contains('jate')) {
+        console.log('jate database already exists');
+        return;
       }
+      db.createObjectStore('jate', { keyPath: 'id', autoIncrement: true });
+      console.log('jate database created');
     },
   });
-};
 
-export const putDb = async (content) => {
-  const db = await openDB('textEditorDB', 1);
-  const tx = db.transaction('content', 'readwrite');
-  const store = tx.objectStore('content');
-  await store.put({ content });
-  await tx.done;
-};
+// TODO: Add logic to a method that accepts some content and adds it to the database
+export const putDb = async (content) => console.error('putDb not implemented');
 
-export const getDb = async () => {
-  const db = await openDB('textEditorDB', 1);
-  const tx = db.transaction('content', 'readonly');
-  const store = tx.objectStore('content');
-  const result = await store.getAll();
-  await tx.done;
-  return result;
-};
+// TODO: Add logic for a method that gets all the content from the database
+export const getDb = async () => console.error('getDb not implemented');
 
-// Initialize the database
-initDB();
+initdb();
